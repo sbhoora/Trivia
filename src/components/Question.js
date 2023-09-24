@@ -5,7 +5,7 @@ function Question() {
     const amount = "4";
     const category = "&category=" + "9";
     const difficulty = "&difficulty=" + "easy";
-    const type = "&type=" + "multiple";
+    const type = "&type=" + "boolean";
 
     //const [API, setAPI] = useState("https://opentdb.com/api.php?amount=" + amount + category + difficulty + type);
 
@@ -20,24 +20,24 @@ function Question() {
 
     const btnClick = () => {
         setQNum(qNum + 1);
-        console.log(qNum);
+        //console.log(qNum);
     }
 
+
     
-    useEffect(() => {
+    useEffect(() => { //goes to the next question when qNum or qList is updated
         if(qList[qNum] != undefined) {
-        console.log('qList has been updated:', qList.length);
-        
         const { question, answer, options } = qList[qNum];
+        //console.log('qList has been updated:', question);
+        //console.log(answer + "   setAnswer:" + (options.indexOf(answer)));
         setQuestion(question);
         setOptions(options);
-        setAnswer(answer);
+        setAnswer(options.indexOf(answer));
         }
-    }, [qNum, qList]); // Add qList to the dependency array
-  
+    }, [qNum, qList]);
     
 
-    function IDEK(amount, category, difficulty, type) {
+    function GetQuestions(amount, category, difficulty, type) {
         useEffect(() => {
             fetch("https://opentdb.com/api.php?amount=" + amount + category + difficulty + type)
                 .then(response => response.json())
@@ -74,18 +74,21 @@ function Question() {
         }, []);
     } 
     
-    IDEK(amount, category, difficulty, type);
+    GetQuestions(amount, category, difficulty, type);
 
     return (  
         
         <>
             <h1>{question}</h1>
             <div>
-                {options.map((answer, index) => (
+                {options.map((option, index) => (
                     <button
                         key={index}
-                        onClick={btnClick}
-                    >{answer}</button>
+                        onClick={() => {
+                            index == answer ? console.log("correct") : console.log("wrong");
+                            btnClick();
+                          }}
+                    >{option}</button>
                 ))}
             </div>
         </>
