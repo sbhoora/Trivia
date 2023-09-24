@@ -1,41 +1,58 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
+import './Question.css';
 
 function Question() {
     const amount = "4";
     const category = "&category=" + "9";
     const difficulty = "&difficulty=" + "easy";
-    const type = "&type=" + "boolean";
+    const type = "&type=" + "multiple";
 
     //const [API, setAPI] = useState("https://opentdb.com/api.php?amount=" + amount + category + difficulty + type);
 
     //question number
     const [qNum, setQNum] = useState(0);
 
+    //list of questions
     const [qList, setQList] = useState([]);
 
     const [question, setQuestion] = useState();
     const [options, setOptions] = useState([]);
     const [answer, setAnswer] = useState();
 
-    const btnClick = () => {
+    //correct answer?
+    const [isCorrect, setIsCorrect] = useState(null);
+
+    const handleNextClick = () => {
         setQNum(qNum + 1);
-        //console.log(qNum);
+        setIsCorrect(null);
+        if (qNum == qList.length - 1 || !isCorrect) {
+            console.log("finished");
+            setQNum(0);
+        }
+        console.log(qNum);
     }
 
+    const handleOptionSelect = (index) => {
+        if (answer == index) {
+            console.log("correct");
+            setIsCorrect(true);
+        } else {
+            console.log("wrong");
+            setIsCorrect(false);
+        }
+    }
 
-    
     useEffect(() => { //goes to the next question when qNum or qList is updated
-        if(qList[qNum] != undefined) {
-        const { question, answer, options } = qList[qNum];
-        //console.log('qList has been updated:', question);
-        //console.log(answer + "   setAnswer:" + (options.indexOf(answer)));
-        setQuestion(question);
-        setOptions(options);
-        setAnswer(options.indexOf(answer));
+        if (qList[qNum] != undefined) {
+            const { question, answer, options } = qList[qNum];
+            //console.log('qList has been updated:', question);
+            setQuestion(question);
+            setOptions(options);
+            setAnswer(options.indexOf(answer));
         }
     }, [qNum, qList]);
-    
+
 
     function GetQuestions(amount, category, difficulty, type) {
         useEffect(() => {
@@ -43,7 +60,7 @@ function Question() {
                 .then(response => response.json())
                 .then(data => {
                     console.log(data); //GOAL 1
-                    
+
                     const temp = [];
 
                     function Question(question, answer, options) {
@@ -68,31 +85,43 @@ function Question() {
                     };
 
                     setQList(temp);
-                 
-                       
+
+
                 });
         }, []);
-    } 
-    
+    }
+
     GetQuestions(amount, category, difficulty, type);
 
-    return (  
-        
-        <>
+    return (
+        <div className="quiz">
+            <p className='questionNum'>{qNum + 1}/{qList.length}</p>
             <h1>{question}</h1>
-            <div>
-                {options.map((option, index) => (
+            <div id="options">
+                {options.map((option, index) => ( //GOAL 2
                     <button
                         key={index}
-                        onClick={() => {
-                            index == answer ? console.log("correct") : console.log("wrong");
-                            btnClick();
-                          }}
+                        onClick={() => { handleOptionSelect(index); }}
+                        disabled={isCorrect !== null}
                     >{option}</button>
                 ))}
             </div>
-        </>
-        
+            {isCorrect === true && (
+                <>
+                    <p>Success! You chose the correct answer.</p>
+                    <button onClick={handleNextClick}>Next</button>
+                </>
+            )}
+            {isCorrect === false && (
+                <>
+                    <p>Oops! You chose the wrong answer.</p>
+                    <p>Correct Answer: {options[answer]}</p>
+                    <button onClick={handleNextClick}>Restart</button>
+                </>
+            )}
+
+        </div>
+
     )
 }
 
