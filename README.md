@@ -1,6 +1,4 @@
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# OutStem Front-end Challenge Winter 2024
 
 ## Available Scripts
 
