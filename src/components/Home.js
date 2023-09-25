@@ -51,12 +51,12 @@ function Home() {
 
     return (
         <div className="Home">
-            <h1>WELCOME TO TRIVIA!</h1>
-            <p>Select your quiz preferences below.</p>
+            <h1 id="homeH1">🌸 Welcome To Trivia! 🌸</h1>
+            <p className="description">Select your quiz preferences below.</p>
 
             <form>
 
-                <label for="quantity">Amount: </label>
+                <label htmlFor="quantity" className='selectLabel'>Amount: </label>
                 <input 
                     type="number" 
                     id="amountSelection" 
@@ -64,8 +64,10 @@ function Home() {
                     min="1"
                 />
 
-                <p>Category: </p>
-                <select id="categorySelection">
+                <br></br>
+                
+                <p className='selectLabel'>Category: </p>
+                <select id="categorySelection" className='qSelect'>
                     <option value="9">General Knowledge</option>
                     <option value="10">Entertainment: Books</option>
                     <option value="any">Any Category</option>
@@ -93,18 +95,26 @@ function Home() {
                     <option value="32">Entertainment: Cartoon &amp; Animations</option>
                 </select>
 
-                <p>Difficulty: </p>
-                <select id="diffSelection">
+                <br></br>
+
+                <p className='selectLabel'>Difficulty: </p>
+                <select id="diffSelection" className='qSelect'>
                     <option value="easy" defaultValue>Easy</option>
                     <option value="medium">Medium</option>
                     <option value="hard">Hard</option>
                 </select>
 
-                <p>Type: </p>
-                <select id="typeSelection">
+                <br></br>
+
+                <p className='selectLabel'>Type: </p>
+                <select id="typeSelection" className='qSelect'>
                     <option value="boolean" defaultValue>Boolean</option>
                     <option value="multiple">Multiple</option>
                 </select>
+
+                <br></br>
+                
+                <button id="startBtn" onClick={handleClick}>Start Quiz</button>
 
             </form>
 

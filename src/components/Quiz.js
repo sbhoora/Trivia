@@ -2,6 +2,8 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import './Quiz.css';
 import { useLocation, useNavigate } from 'react-router-dom';
+import heart from '../images/heart.png';
+import he from 'he';
 
 function Quiz(props) {
     const navigate = useNavigate();
@@ -14,7 +16,7 @@ function Quiz(props) {
     const difficulty = "&difficulty=" + data.difficulty;
     const type = "&type=" + data.type;
 
-    
+
     //question number
     const [qNum, setQNum] = useState(0);
 
@@ -35,29 +37,32 @@ function Quiz(props) {
     const [points, setPoints] = useState(0);
 
     const addPoints = () => {
-        if (data.difficulty == "easy"){
-            setPoints(points+1);
-        } else if (data.difficulty == "medium"){
-            setPoints(points+5);
-        } else if (data.difficulty == "hard"){
-            setPoints(points+10);
+        if (data.difficulty == "easy") {
+            setPoints(points + 1);
+        } else if (data.difficulty == "medium") {
+            setPoints(points + 5);
+        } else if (data.difficulty == "hard") {
+            setPoints(points + 10);
         }
     }
 
     const handleNextClick = () => {
-        console.log(qNum+2)
+        console.log(qNum + 2)
         setIsCorrect(null);
         if (qNum == qList.length - 1 && isCorrect) { //all questions are answered correctly
             console.log("finished");
             setQNum(0);
-        } else if (!isCorrect && lives == 0){ //answer was wrong and 0 lives left
+            setLives(3);
+            setPoints(0);
+        } else if (!isCorrect && lives == 0) { //answer was wrong and 0 lives left
             console.log("restart");
             setQNum(0);
             setLives(3);
-        } else if (!isCorrect && lives > 0 && qNum+2<=qList.length){ //answer was wrong and 1 or 2 lives left
+            setPoints(0);
+        } else if (!isCorrect && lives > 0 && qNum + 2 <= qList.length) { //answer was wrong and 1 or 2 lives left
             setQNum(qNum + 1);
             //setLives(lives-1);
-        } else if (isCorrect && lives > 0 && qNum+2<=qList.length){ 
+        } else if (isCorrect && lives > 0 && qNum + 2 <= qList.length) {
             setQNum(qNum + 1);
         }
         //console.log(qNum);
@@ -71,7 +76,7 @@ function Quiz(props) {
         } else {
             //console.log("wrong");
             setIsCorrect(false);
-            setLives(lives-1);
+            setLives(lives - 1);
         }
     }
 
@@ -96,8 +101,8 @@ function Quiz(props) {
                     const temp = [];
 
                     function Question(question, answer, options) {
-                        this.question = question;
-                        this.answer = answer;
+                        this.question = he.decode(question);
+                        this.answer = he.decode(answer);
                         this.options = options;
                     }
 
@@ -124,46 +129,62 @@ function Quiz(props) {
     }
 
     GetQuestions(amount, category, difficulty, type);
-
+    //style={{ display: showInfo ? "block" : "none" }
     return (
         <div className="quiz">
-            <p className='questionNum'>{qNum + 1}/{qList.length}</p>
-            <p className="lives">Lives: {lives}/3</p>
+            <p className='questionNum'>Question: {qNum + 1}/{qList.length}</p>
+            
+            <div className="heart">
+                <img src={heart} alt="heartPic"  width="100" height="100" 
+                    style={{ display: lives == 3 ? "" : "none" }}/>
+                <img src={heart} alt="heartPic" width="100" height="100"
+                    style={{ display: lives >= 2  ? "" : "none" }}/>
+                <img src={heart} alt="heartPic" width="100" height="100" 
+                    style={{ display: lives >= 1 ? "" : "none" }}/>
+            </div>
+
             <p className="points">Points: {points}</p>
-            <h1>{question}</h1>
-            <div id="options">
+
+            <h1 className='questionH1'>{question}</h1>
+
+            <div id="options" >
                 {options.map((option, index) => ( //GOAL 2
                     <button
                         key={index}
                         onClick={() => { handleOptionSelect(index); }}
                         disabled={isCorrect !== null}
-                    >{option}</button>
+                        id="optionBtns"
+                    >{he.decode(option)}</button>
                 ))}
             </div>
-            {isCorrect === true && (
-                <>
-                    <p>Success! You chose the correct answer.</p>
-                    {qNum == qList.length - 1 ? 
-                    (<>
-                        <p>YAYY UR DONE</p>
-                        <button onClick={() => navigate('/congrats')}>DONE</button>
-                    </>) : 
-                    (<button onClick={handleNextClick}>Next</button>)}
-                </>
-            )}
-            {isCorrect === false && (
-                <>
-                    <p>Oops! You chose the wrong answer.</p>
-                    <p>Correct Answer: {options[answer]}</p>
-                    {lives == 0 ?
-                        (<>
-                            <p>The quiz must be restarted now</p>
-                            <button onClick={handleNextClick}>Restart</button> 
-                        </>):
-                        (<button onClick={handleNextClick}>Next</button>)
-                    }
-                </>
-            )}
+
+            <div className='msg' style={{ display: isCorrect!=null ? "" : "none" }}>
+                {isCorrect === true && (
+                    <>
+                        <p>Success! You chose the correct answer. 🙌🏼</p>
+                        {qNum == qList.length - 1 ?
+                            (<>
+                                <p>YAYY UR DONE 🎉</p>
+                                <button className='qChangeBtn' onClick={() => navigate('/congrats') }>DONE</button>
+                            </>) :
+                            (<button className='qChangeBtn' onClick={handleNextClick}>Next</button>)}
+                    </>
+                )}
+
+                {isCorrect === false && (
+                    <>
+                        <p>Oops! You chose the wrong answer. 😭</p>
+                        <p>Correct Answer: {options[answer]}</p>
+                        {lives == 0 ?
+                            (<>
+                                <p>The quiz must be restarted now. 😔</p>
+                                <button onClick={handleNextClick} className='qChangeBtn'>Restart</button>
+                            </>) :
+                            (<button onClick={handleNextClick} className='qChangeBtn'>Next</button>)
+                        }
+                    </>
+                )}
+            </div>
 
         </div>
 
