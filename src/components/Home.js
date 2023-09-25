@@ -108,8 +108,6 @@ function Home() {
 
             </form>
 
-            <button onClick={handleClick}>Start Quiz</button>
-
         </div>
     );
 }
