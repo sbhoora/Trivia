@@ -51,7 +51,7 @@ function Home() {
 
     return (
         <div className="Home">
-            <h1>WELCOME TO TRVIA</h1>
+            <h1>WELCOME TO TRIVIA!</h1>
             <p>Select your quiz preferences below.</p>
 
             <form>
