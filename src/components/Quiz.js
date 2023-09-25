@@ -14,10 +14,7 @@ function Quiz(props) {
     const difficulty = "&difficulty=" + data.difficulty;
     const type = "&type=" + data.type;
 
-    console.log(difficulty);
-    console.log(type);
-    console.log(category);
-
+    
     //question number
     const [qNum, setQNum] = useState(0);
 
@@ -31,15 +28,37 @@ function Quiz(props) {
     //correct answer?
     const [isCorrect, setIsCorrect] = useState(null);
 
+    //Give the user 2 extra lives instead of ending the game on the first failure
+    const [lives, setLives] = useState(3);
+    //Add a points system for different question difficulties
+    //easy = 1, medium = 5, hard = 10
+    const [points, setPoints] = useState(0);
+
+    const addPoints = () => {
+        if (data.difficulty == "easy"){
+            setPoints(points+1);
+        } else if (data.difficulty == "medium"){
+            setPoints(points+5);
+        } else if (data.difficulty == "hard"){
+            setPoints(points+10);
+        }
+    }
+
     const handleNextClick = () => {
-        setQNum(qNum + 1);
+        console.log(qNum+2)
         setIsCorrect(null);
-        if (qNum == qList.length - 1 && isCorrect) {
+        if (qNum == qList.length - 1 && isCorrect) { //all questions are answered correctly
             console.log("finished");
             setQNum(0);
-        } else if (!isCorrect){
+        } else if (!isCorrect && lives == 0){ //answer was wrong and 0 lives left
             console.log("restart");
             setQNum(0);
+            setLives(3);
+        } else if (!isCorrect && lives > 0 && qNum+2<=qList.length){ //answer was wrong and 1 or 2 lives left
+            setQNum(qNum + 1);
+            //setLives(lives-1);
+        } else if (isCorrect && lives > 0 && qNum+2<=qList.length){ 
+            setQNum(qNum + 1);
         }
         //console.log(qNum);
     }
@@ -48,9 +67,11 @@ function Quiz(props) {
         if (answer == index) {
             //console.log("correct");
             setIsCorrect(true);
+            addPoints();
         } else {
             //console.log("wrong");
             setIsCorrect(false);
+            setLives(lives-1);
         }
     }
 
@@ -77,7 +98,7 @@ function Quiz(props) {
                     function Question(question, answer, options) {
                         this.question = question;
                         this.answer = answer;
-                        this.options = options
+                        this.options = options;
                     }
 
                     for (let i = 0; i < data.results.length; i++) {
@@ -107,6 +128,8 @@ function Quiz(props) {
     return (
         <div className="quiz">
             <p className='questionNum'>{qNum + 1}/{qList.length}</p>
+            <p className="lives">Lives: {lives}/3</p>
+            <p className="points">Points: {points}</p>
             <h1>{question}</h1>
             <div id="options">
                 {options.map((option, index) => ( //GOAL 2
@@ -132,7 +155,13 @@ function Quiz(props) {
                 <>
                     <p>Oops! You chose the wrong answer.</p>
                     <p>Correct Answer: {options[answer]}</p>
-                    <button onClick={handleNextClick}>Restart</button>
+                    {lives == 0 ?
+                        (<>
+                            <p>The quiz must be restarted now</p>
+                            <button onClick={handleNextClick}>Restart</button> 
+                        </>):
+                        (<button onClick={handleNextClick}>Next</button>)
+                    }
                 </>
             )}
 
