@@ -1,12 +1,12 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import './Question.css';
+import './Quiz.css';
 
 function Question() {
-    const amount = "4";
+    const amount = "2";
     const category = "&category=" + "9";
     const difficulty = "&difficulty=" + "easy";
-    const type = "&type=" + "multiple";
+    const type = "&type=" + "boolean";
 
     //const [API, setAPI] = useState("https://opentdb.com/api.php?amount=" + amount + category + difficulty + type);
 
@@ -26,19 +26,22 @@ function Question() {
     const handleNextClick = () => {
         setQNum(qNum + 1);
         setIsCorrect(null);
-        if (qNum == qList.length - 1 || !isCorrect) {
+        if (qNum == qList.length - 1 && isCorrect) {
             console.log("finished");
             setQNum(0);
+        } else if (!isCorrect){
+            console.log("restart");
+            setQNum(0);
         }
-        console.log(qNum);
+        //console.log(qNum);
     }
 
     const handleOptionSelect = (index) => {
         if (answer == index) {
-            console.log("correct");
+            //console.log("correct");
             setIsCorrect(true);
         } else {
-            console.log("wrong");
+            //console.log("wrong");
             setIsCorrect(false);
         }
     }
@@ -109,7 +112,12 @@ function Question() {
             {isCorrect === true && (
                 <>
                     <p>Success! You chose the correct answer.</p>
-                    <button onClick={handleNextClick}>Next</button>
+                    {qNum == qList.length - 1 ? 
+                    (<>
+                        <p>YAYY UR DONE</p>
+                        <button onClick={handleNextClick}>DONE</button>
+                    </>) : 
+                    (<button onClick={handleNextClick}>Next</button>)}
                 </>
             )}
             {isCorrect === false && (
