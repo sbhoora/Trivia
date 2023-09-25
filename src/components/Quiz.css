@@ -82,3 +82,30 @@
     padding:2%;
     border-radius: 20px;
 }
+
+.statsContainer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.questionNumberContainer {
+    display: flex;
+    align-items: center;
+    margin-top: -20px;
+}
+
+.questionNum{
+    font-size: 30px;
+    margin-right: 5px;
+    
+}
+
+.points{
+    align-items: right;
+    margin-top: 1px;
+    font-size: 22px;
+}
+
+
+  

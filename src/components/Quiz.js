@@ -132,18 +132,25 @@ function Quiz(props) {
     //style={{ display: showInfo ? "block" : "none" }
     return (
         <div className="quiz">
-            <p className='questionNum'>Question: {qNum + 1}/{qList.length}</p>
-            
+
             <div className="heart">
-                <img src={heart} alt="heartPic"  width="100" height="100" 
-                    style={{ display: lives == 3 ? "" : "none" }}/>
                 <img src={heart} alt="heartPic" width="100" height="100"
-                    style={{ display: lives >= 2  ? "" : "none" }}/>
-                <img src={heart} alt="heartPic" width="100" height="100" 
-                    style={{ display: lives >= 1 ? "" : "none" }}/>
+                    style={{ display: lives == 3 ? "" : "none" }} />
+                <img src={heart} alt="heartPic" width="100" height="100"
+                    style={{ display: lives >= 2 ? "" : "none" }} />
+                <img src={heart} alt="heartPic" width="100" height="100"
+                    style={{ display: lives >= 1 ? "" : "none" }} />
             </div>
 
-            <p className="points">Points: {points}</p>
+            <div className='statsContainer'>
+                <div className='questionNumberContainer'>
+                    <p className='questionNum'>{qNum + 1}</p>
+                    <p className='questionTotal'>/{qList.length}</p>
+                </div>
+
+                <p className="points">Points: {points}</p>
+            </div>
+            
 
             <h1 className='questionH1'>{question}</h1>
 
@@ -158,14 +165,14 @@ function Quiz(props) {
                 ))}
             </div>
 
-            <div className='msg' style={{ display: isCorrect!=null ? "" : "none" }}>
+            <div className='msg' style={{ display: isCorrect != null ? "" : "none" }}>
                 {isCorrect === true && (
                     <>
                         <p>Success! You chose the correct answer. 🙌🏼</p>
                         {qNum == qList.length - 1 ?
                             (<>
                                 <p>YAYY UR DONE 🎉</p>
-                                <button className='qChangeBtn' onClick={() => navigate('/congrats') }>DONE</button>
+                                <button className='qChangeBtn' onClick={() => navigate('/congrats')}>DONE</button>
                             </>) :
                             (<button className='qChangeBtn' onClick={handleNextClick}>Next</button>)}
                     </>
