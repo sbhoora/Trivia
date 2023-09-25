@@ -1,14 +1,20 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import './Quiz.css';
+import { useLocation } from 'react-router-dom';
 
-function Question() {
-    const amount = "2";
-    const category = "&category=" + "9";
-    const difficulty = "&difficulty=" + "easy";
-    const type = "&type=" + "boolean";
+function Quiz(props) {
+    const location = useLocation();
+    const data = location.state ? location.state.data : null;
 
-    //const [API, setAPI] = useState("https://opentdb.com/api.php?amount=" + amount + category + difficulty + type);
+    const amount = data.amount;
+    const category = "&category=" + data.category;
+    const difficulty = "&difficulty=" + data.difficulty;
+    const type = "&type=" + data.type;
+
+    console.log(difficulty);
+    console.log(type);
+    console.log(category);
 
     //question number
     const [qNum, setQNum] = useState(0);
@@ -133,5 +139,5 @@ function Question() {
     )
 }
 
-export default Question;
+export default Quiz;
 
