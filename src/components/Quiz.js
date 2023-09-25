@@ -1,9 +1,11 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import './Quiz.css';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 function Quiz(props) {
+    const navigate = useNavigate();
+
     const location = useLocation();
     const data = location.state ? location.state.data : null;
 
@@ -121,7 +123,7 @@ function Quiz(props) {
                     {qNum == qList.length - 1 ? 
                     (<>
                         <p>YAYY UR DONE</p>
-                        <button onClick={handleNextClick}>DONE</button>
+                        <button onClick={() => navigate('/congrats')}>DONE</button>
                     </>) : 
                     (<button onClick={handleNextClick}>Next</button>)}
                 </>
