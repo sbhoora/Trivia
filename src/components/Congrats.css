@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap');
+
+.congrats {
+    margin-top: 4%;
+    font-family: 'Quicksand', sans-serif;
+}
+
+#sanrioImg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#newQuizBtn {
+    text-align: center;
+    position: relative;
+    margin-top: 35%;
+    margin-left: -3%;
+    left: 47.5%;
+    height: 45px;
+    width: 160px;
+    font-size: 15px;
+    font-weight: bold;
+    border-radius: 12px;
+    cursor: pointer;
+    background-color: #c7eca3;
+    display: inline;
+    box-shadow: 1px 1px black;
+}
+
+#newQuizBtn:active {
+    background-color: #b0d38f;
+    box-shadow: 0px 0px;
+}
